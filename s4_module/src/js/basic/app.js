@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './Header';
+import Header from '../common/Header';
 import BootstrapButton from './BootstrapButton';
 
 const appInstance = (
@@ -8,8 +8,6 @@ const appInstance = (
 		<Header>Bootstrap按钮</Header>
 		<BootstrapButton/>
 		<hr/>
-		<Header>Bootstrap按钮</Header>
-		<BootstrapButton/>
 	</div>
 );
 ReactDOM.render(
