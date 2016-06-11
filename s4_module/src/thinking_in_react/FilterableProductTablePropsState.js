@@ -1,24 +1,6 @@
 import React from 'react';
 import {FormGroup,ControlLabel,FormControl,Checkbox,Label,Table } from 'react-bootstrap';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var ProductCategoryRow = React.createClass({
   render: function() {
     return (<tr><th colSpan="2">{this.props.category}</th></tr>);
@@ -55,7 +37,13 @@ var ProductTable = React.createClass({
   render: function() {
     var rows = [];
     var lastCategory = null;
+	let filterText = this.props.filterText;
+	let inStockOnly = this.props.inStockOnly;
     this.props.products.forEach(function(product) {
+	  // 过滤表格内容
+      if (product.name.indexOf(filterText) === -1 || (!product.stocked && inStockOnly)) {
+        return;
+      }
       if (product.category !== lastCategory) {
         rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
       }
@@ -106,7 +94,11 @@ var FilterableProductTable = React.createClass({
           filterText={this.state.filterText}
           inStockOnly={this.state.inStockOnly}
 		/>
-        <ProductTable products={this.props.products} />
+        <ProductTable
+		  products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+		/>
       </div>
     );
   }
