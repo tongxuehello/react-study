@@ -133,5 +133,4 @@ var FilterableProductTable = React.createClass({
   }
 });
 
-
 export default FilterableProductTable;
