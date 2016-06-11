@@ -5,7 +5,8 @@ var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 module.exports = {
 	entry : {
 		basic : './src/basic/app.js',
-		thinking_in_react : './src/thinking_in_react/app.js'
+		thinking_in_react : './src/thinking_in_react/app.js',
+		thinking_in_react_inverse_data_flow : './src/thinking_in_react_inverse_data_flow/app.js'
 	},
 	output : {
 		path : __dirname + "/build/js/",
