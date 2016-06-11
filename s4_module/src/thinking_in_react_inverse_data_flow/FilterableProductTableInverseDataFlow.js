@@ -3,7 +3,7 @@ import {FormGroup,ControlLabel,FormControl,Checkbox,Label,Table } from 'react-bo
 
 var ProductCategoryRow = React.createClass({
   render() {
-    return (<tr><th colSpan="2">{this.props.category}</th></tr>);
+    return (<tr><th colSpan="2" style={{color:'#336699'}}>{this.props.category}</th></tr>);
   }
 });
 
@@ -39,9 +39,9 @@ var ProductTable = React.createClass({
     var lastCategory = null;
 	let filterText = this.props.filterText;
 	let inStockOnly = this.props.inStockOnly;
+	console.log("filterText => %s",filterText);
     this.props.products.forEach(function(product) {
 	  // 过滤表格内容
-	  console.log("filterText => %s",filterText);
       if (product.name.indexOf(filterText) === -1 || (!product.stocked && inStockOnly)) {
         return;
       }
@@ -52,7 +52,7 @@ var ProductTable = React.createClass({
       lastCategory = product.category;
     });
     return (
-      <Table striped bordered condensed hover>
+      <Table condensed hover>
         <thead>
           <tr>
             <th>Name</th>
@@ -104,8 +104,8 @@ var SearchBar = React.createClass({
 var FilterableProductTable = React.createClass({
   getInitialState(){
 	  return {
-		filterText: 's',
-		inStockOnly: true
+		filterText: '',
+		inStockOnly: false
 	  };
   },
   render(){
