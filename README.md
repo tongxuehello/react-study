@@ -210,164 +210,156 @@ var FilterableProductTable = React.createClass({
 
 ### 1. 概述
 
-- action
+#### action
 
-  - **「预处理函数」**：负责将脏数据筛选掉
-  - 事件 => 数据or状态变化 => dom变化
-  - event => action
+- **「预处理函数」**：负责将脏数据筛选掉
+- 事件 => 数据or状态变化 => dom变化
+- event => action
 
-  ```javascript
-  //actions.js
-  //添加 item 只需要一个 text 字符串数据
-  export function addItem(text) {
-      return {
-          type: 'ADD_ITEM',
-          text
-      }
-  }
-  //删除 item 只需要拿到它的 id
-  export function deleteItem(id) {
-      return {
-          type: 'DELETE_ITEM',
-          id
-      }
-  }
+```javascript
+//actions.js
+//添加 item 只需要一个 text 字符串数据
+export function addItem(text) {
+    return {
+        type: 'ADD_ITEM',
+        text
+    }
+}
+//删除 item 只需要拿到它的 id
+export function deleteItem(id) {
+    return {
+        type: 'DELETE_ITEM',
+        id
+    }
+}
 
-  //删除所有已完成事项，不需要额外数据，只需要线索，线索就是 type
-  export function clearCompleted() {
-      return {
-          type: 'CLEAR_COMPLETED'
-      }
-  }
-  ```
+//删除所有已完成事项，不需要额外数据，只需要线索，线索就是 type
+export function clearCompleted() {
+    return {
+        type: 'CLEAR_COMPLETED'
+    }
+}
+```
+#### reducer
 
-- reducer
+- **「数据再处理函数」**：迎接 action 函数返回的线索
+- 将各种action各种情况汇总成一个全局的state对象
+- 由于state是全局的，所以handle方法中操作数据很不方便：使用combineReducers
 
-  - **「数据再处理函数」**：迎接 action 函数返回的线索
-  - 将各种action各种情况汇总成一个全局的state对象
-  - 由于state是全局的，所以handle方法中操作数据很不方便：使用combineReducers
+```javascript
+//reducer 接受两个参数，全局数据对象 state 以及 action 函数返回的 action 对象
+//返回新的全局数据对象 new state
+export default (state, action) => {
+    switch (action.type) {
+        case A:
+        return handleA(state)
+        case B:
+        return handleB(state)
+        case C:
+        return handleC(state)
+        default:
+        return state //如果没有匹配上就直接返回原 state
+    }
+}
+```
+#### combineReducers
 
-  ```javascript
-  //reducer 接受两个参数，全局数据对象 state 以及 action 函数返回的 action 对象
-  //返回新的全局数据对象 new state
-  export default (state, action) => {
-      switch (action.type) {
-          case A:
-          return handleA(state)
-          case B:
-          return handleB(state)
-          case C:
-          return handleC(state)
-          default:
-          return state //如果没有匹配上就直接返回原 state
-      }
-  }
-  ```
+- 可以避免在handle方法中处理全局的state对象，使每个reducer只处理一部分数据
+- combineReducers接收一个包含很多小reducer的json对象，每个小reducer根据key值获取它所需要的数据
+- combineReducers得到一个大的**reducer函数**
+```javascript
+var reducers = {
+    todos: (state, action) => { //预期此处的 state 参数是全局 state.todos 属性
+        switch (action.type) {...} //返回的 new state 更新到全局 state.todos 属性中
+    },
+    activeFilter: (state, action) => { //预期拿到 state.activeFilter 作为此处的 state
+        switch (action.type) {...} //new state 更新到全局 state.activeFilter 属性中
+    }
+}
 
-
-- combineReducers
-
-  - 可以避免在handle方法中处理全局的state对象，使每个reducer只处理一部分数据
-  - combineReducers接收一个包含很多小reducer的json对象，每个小reducer根据key值获取它所需要的数据
-  - combineReducers得到一个大的**reducer函数**
-  ```javascript
-  var reducers = {
-      todos: (state, action) => { //预期此处的 state 参数是全局 state.todos 属性
-          switch (action.type) {...} //返回的 new state 更新到全局 state.todos 属性中
-      },
-      activeFilter: (state, action) => { //预期拿到 state.activeFilter 作为此处的 state
-          switch (action.type) {...} //new state 更新到全局 state.activeFilter 属性中
-      }
-  }
-
-  //返回一个 rootReducer 函数
-  //在内部将 reducers.todos 函数的返回值，挂到 state.todos 中
-  //在内部将 reducers.activeFilter 函数的返回值，挂到 state.activeFilter 中
-  var rootReducer = combineReducers(reducers)	
-  ```
-
-
+//返回一个 rootReducer 函数
+//在内部将 reducers.todos 函数的返回值，挂到 state.todos 中
+//在内部将 reducers.activeFilter 函数的返回值，挂到 state.activeFilter 中
+var rootReducer = combineReducers(reducers)	
+```
 > 目前 redux 并没有提供简便的映射到 state.a.b 一级以上深度的 state 的方法。三种处理方案：
 > http://div.io/topic/1309
 
-- createStore
+#### createStore
 
-  - createStore(reducer, initialState)
+- createStore(reducer, initialState)
 
-  - 返回结果是一堆函数，最主要的是dispatch, subscribe, getState：
+- 返回结果是一堆函数，最主要的是dispatch, subscribe, getState：
+
+  ```javascript
+  //此处为示意，不是 redux 的源码本身
+  export default createStore(reducer, initialState) {
+      //闭包私有变量 
+      let currentState = initialState
+      let currentReducer = reducer
+      let listeners = []
+
+      //返回一个包含可访问闭包变量的公有方法
+      return {
+          getState() {
+              return currentState //返回当前 state
+          },
+          subscribe(listener) {
+              let index = listeners.length
+              listeners.push(listener) //缓存 listener
+              return () => listeners.splice(i, 1) //返回删除该 listener 的函数
+          },
+          dispatch(action) {
+              //更新 currentState
+              currentState = currentReducer(currentState, action)
+              listeners.slice().forEach(listener => listener())
+              return action //返回 action 对象
+          }
+      }
+  }
+  ```
+
+  ​
+
+#### bindActionCreators
+
+- 传入actionCreator函数和store.dispatch函数，包装了dispatch函数的调用
+
+- 解决dispatch函数调用比较复杂的问题：需要的是json，但提供的是函数，中间用bindActionCreators转换了一下
+
+- 实现方式
+
+  - 处理单个stateCreator：bindActionCreator
 
     ```javascript
-    //此处为示意，不是 redux 的源码本身
-    export default createStore(reducer, initialState) {
-        //闭包私有变量 
-        let currentState = initialState
-        let currentReducer = reducer
-        let listeners = []
-
-        //返回一个包含可访问闭包变量的公有方法
-        return {
-            getState() {
-                return currentState //返回当前 state
-            },
-            subscribe(listener) {
-                let index = listeners.length
-                listeners.push(listener) //缓存 listener
-                return () => listeners.splice(i, 1) //返回删除该 listener 的函数
-            },
-            dispatch(action) {
-                //更新 currentState
-                currentState = currentReducer(currentState, action)
-                listeners.slice().forEach(listener => listener())
-                return action //返回 action 对象
-            }
-        }
+    //将 actionCreator 跟 dispatch 绑定在一起
+    let bindActionCreator => (actionCreator, dispatch) {
+      return (...args) => dispatch(actionCreator(...args));
     }
+
+    //普通工厂函数，返回一个对象
+    let addItem = text => ({
+        type: 'ADD_ITEM',
+        text
+    })
+
+    //跟 store.dispatch 绑定起来，成为真正可以改变 currentState 的 action 函数
+    let addItem = bindActionCreator(addItem, store.dispatch)
     ```
 
-    ​
+  - 处理多个stateCreator：**bindActionCreators**
 
-
-
-- bindActionCreators
-
-  - 传入actionCreator函数和store.dispatch函数，包装了dispatch函数的调用
-
-  - 解决dispatch函数调用比较复杂的问题：需要的是json，但提供的是函数，中间用bindActionCreators转换了一下
-
-  - 实现方式
-
-    - 处理单个stateCreator：bindActionCreator
-
-      ```javascript
-      //将 actionCreator 跟 dispatch 绑定在一起
-      let bindActionCreator => (actionCreator, dispatch) {
-        return (...args) => dispatch(actionCreator(...args));
+    ```javascript
+    export default function bindActionCreators(actionCreators, dispatch) {
+      if (typeof actionCreators === 'function') { //如果是单个 actionCreator，绑定一词
+        return bindActionCreator(actionCreators, dispatch);
       }
-
-      //普通工厂函数，返回一个对象
-      let addItem = text => ({
-          type: 'ADD_ITEM',
-          text
-      })
-
-      //跟 store.dispatch 绑定起来，成为真正可以改变 currentState 的 action 函数
-      let addItem = bindActionCreator(addItem, store.dispatch)
-      ```
-
-    - 处理多个stateCreator：**bindActionCreators**
-
-      ```javascript
-      export default function bindActionCreators(actionCreators, dispatch) {
-        if (typeof actionCreators === 'function') { //如果是单个 actionCreator，绑定一词
-          return bindActionCreator(actionCreators, dispatch);
-        }
-        //返回一个改造过的「函数组合」
-        return mapValues(actionCreators, actionCreator =>
-          bindActionCreator(actionCreator, dispatch)
-        )
-      }
-      ```
-
+      //返回一个改造过的「函数组合」
+      return mapValues(actionCreators, actionCreator =>
+        bindActionCreator(actionCreator, dispatch)
+      )
+    }
+    ```
 
 
 
