@@ -208,6 +208,8 @@ var FilterableProductTable = React.createClass({
 
 ## s5 Redux
 
+> redux 中文文档：http://cn.redux.js.org/docs/api/bindActionCreators.html
+
 ### 1. React的特点
 
 理解 React 是理解 Redux 存在的前提，所以在阐述 Redux 是什么之前，我们先来说说 React。

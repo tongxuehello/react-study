@@ -4,9 +4,9 @@ var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 
 module.exports = {
 	entry : {
-		basic : './src/basic/app.js',
-		thinking_in_react : './src/thinking_in_react/app.js',
-		thinking_in_react_inverse_data_flow : './src/thinking_in_react_inverse_data_flow/app.js',
+		//basic : './src/basic/app.js',
+		//thinking_in_react : './src/thinking_in_react/app.js',
+		//thinking_in_react_inverse_data_flow : './src/thinking_in_react_inverse_data_flow/app.js',
 		react_with_redux : './src/react_with_redux/index.js'
 	},
 	output : {

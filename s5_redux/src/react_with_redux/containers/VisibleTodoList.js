@@ -29,10 +29,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 */
+
 const mapDispatchToProps = (dispatch) => ({
-  ...bindActionCreators({
-	  onTodoClick: id => toggleTodo(id)
-  },dispatch)
+	onTodoClick: bindActionCreators(id => toggleTodo(id),dispatch)
 })
 
 const VisibleTodoList = connect(
