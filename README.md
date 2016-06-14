@@ -208,7 +208,17 @@ var FilterableProductTable = React.createClass({
 
 ## s5 Redux
 
-### 1. 概述
+### 1. React的特点
+
+理解 React 是理解 Redux 存在的前提，所以在阐述 Redux 是什么之前，我们先来说说 React。
+
+- React 是数据驱动的。任何页面（view）展现形态的变化一定是通过改变数据来触发的，而不是直接操作 DOM。
+- 触发页面（或者组件）重新渲染的媒介只有 props 和 state。state 是 **组件内部自行管理** 的数据对象；而 props 由父级组件或者顶层数据决定，是组件之间通信的桥梁，可用来传递数据。此外，React 是 **单向下发** 的，没有向上回溯的能力。
+- React 组件间的通信。父组件可以很便利地通过 props 来控制子组件的显示形态，而子组件要想改变父组件的显示形态，只能通过执行父组件 **预先提供好的函数 props** 。那么，如果想改变父组件形态的是曾孙子组件呢？你不会告诉我，把父组件提供的函数一级一级往下传递吧？
+
+鉴于 React 的这些特性，如果把所有影响组件形态的数据集中起来，统一存放在一个地方（理解为 store 吧），并且要改变组件形态只能通过修改 store 中的数据（数据流向大概是这样的：store => view => store），那么这个东西是不是特别吻合 React 的单向数据流呢？
+
+### 2. 概述
 
 #### action
 
@@ -361,15 +371,52 @@ var rootReducer = combineReducers(reducers)
     }
     ```
 
+#### 入口
+
+- 普通方式
+
+  ```javascript
+  //app.js
+  let store = createStore(reducers, initialState)
+  let actions = bindActionCreators(actionCreators, store.dispatch)
+  let render = () => {
+      React.render(
+          <Root {...store.getState()} {...actions} >, //传 action，传 state 数据
+          document.getElementById('container')
+      )
+  }
+
+  store.subscribe(render) //当 state 变化时，重新渲染
+  ```
+
+- 使用react-redux
+  ```javascript
+  <Provider></Provider> + connect
+  ```
 
 
+### 3. react-redux
 
+> https://leozdgao.me/reacthe-reduxde-qiao-jie-react-redux/
 
-### 2. 代码示例
+#### Provider
+
+作用：
+
+1. 传递redux的store作为props至react组件中，供connect函数使用
+
+#### connect
+
+作用：
+
+1. 将store中必要的数据作为props传给react组件来render
+2. 包装action creator用于在响应用户操作时dispatch一个action
+
+### 4. 代码示例
 
 > http://div.io/topic/1309
 
-###  3. mixin
+###  5. mixin
 
 http://es6.ruanyifeng.com/#docs/decorator
 
