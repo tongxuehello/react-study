@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
+// react组件的另外一种写法，直接写render函数，它的参数是什么？（parent component props）
 let AddTodo = ({ dispatch }) => {
   let input
 
@@ -25,6 +26,8 @@ let AddTodo = ({ dispatch }) => {
     </div>
   )
 }
+
+// 这句话的作用？如果不写这句话可以吗？
 AddTodo = connect()(AddTodo)
 
 export default AddTodo

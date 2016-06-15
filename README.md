@@ -209,6 +209,8 @@ var FilterableProductTable = React.createClass({
 ## s5 Redux
 
 > redux 中文文档：http://cn.redux.js.org/docs/api/bindActionCreators.html
+>
+> 数据流：http://cn.redux.js.org/docs/basics/DataFlow.html
 
 ### 1. React的特点
 
