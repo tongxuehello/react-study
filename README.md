@@ -35,16 +35,16 @@ jsx代码也是写在html里，用`<script src="text/babel"></script>`标识
 
 ### 代码结构
 
-- build
-  - js
-    - app.entry.js
-    - common.js
-- src
-  - js
-    - app.js
-- index.html
-- package.json
-- webpack.config.js
+-             build
+                  - js
+              - app.entry.js
+              - common.js
+-             src
+                  - js
+              - app.js
+-             index.html
+-             package.json
+-             webpack.config.js
 
 ---
 
@@ -423,6 +423,64 @@ var rootReducer = combineReducers(reducers)
 ###  5. mixin
 
 http://es6.ruanyifeng.com/#docs/decorator
+
+## s6 购物车示例
+
+### 1. 目录结构
+
+```diff
+- index.js
+- containers
+  - App.js
+  - ProductsContainer.js
+  - CartContainer.js
+- components
+  - ProductsList.js
+  - ProductItem.js
+  - Product.js
+  - Cart.js
+- actions
+  - index.js
+- reducers
+  - index.js
+  - products.js
+  - cart.js
+```
+
+- index.js
+
+  > redux入口
+  >
+  > 1. createStore，将combine后的reducer注入到store
+  > 2. 应用了middleware [TBC]
+  > 3. 获取products数据
+  >    - dispatch action: getAllProducts (actions/index.js)
+  >      - shop.getProducts异步获取数据 (api/shop.js)
+  >        - dispatch action: receiveProducts (actions/index.js) ==> `RECEIVE_PRODUCTS`
+
+- containers
+  - App.js
+  - ProductsContainer.js
+  - CartContainer.js
+
+- components
+  - ProductsList.js
+  - ProductItem.js
+  - Product.js
+  - Cart.js
+
+- actions
+  - index.js
+
+- reducers
+  - index.js
+  - products.js
+  - cart.js
+
+- api
+
+  - shop.js
+  - products.json
 
 ## 其他说明
 
