@@ -454,16 +454,6 @@ http://es6.ruanyifeng.com/#docs/decorator
     >    3. dispatch了位于actions/index.js的action:`receiveProducts`最终返回的state type为： `RECEIVE_PRODUCTS`
     > 4. 引入了<App/>标签
 
-  > redux入口
-  >
-  > 1. createStore，将combine后的reducer注入到store
-  > 2. 应用了middleware [TBC]
-  > 3. 获取products数据
-  >    1. dispatch了位于actions/index.js的action: `getAllProducts`
-  >    2. 在`getAllProducts`中调用了位于api/shop.js的异步方法`shop.getProducts`异步获取数据
-  >    3. dispatch了位于actions/index.js的action:`receiveProducts`最终返回的state type为： `'RECEIVE_PRODUCTS'`
-  > 4. 引入了<App/>标签
-  > 
 - containers
   - App.js
         > 引入了`ProductsContainer`和`CartContainer`
