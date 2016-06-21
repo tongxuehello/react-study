@@ -46,7 +46,6 @@ jsx代码也是写在html里，用`<script src="text/babel"></script>`标识
 - package.json
 - webpack.config.js
 
-
 ### npm
 
 npm是个好东西，用他来引入各种js资源，自己感觉类似于java中的maven，定义了项目的生命周期。配置文件：package.json。
@@ -442,8 +441,6 @@ http://es6.ruanyifeng.com/#docs/decorator
   - products.js
   - cart.js
 
-
-----------
 ### 2. 源码分析
 
 - index.js
@@ -457,6 +454,16 @@ http://es6.ruanyifeng.com/#docs/decorator
     >    3. dispatch了位于actions/index.js的action:`receiveProducts`最终返回的state type为： `RECEIVE_PRODUCTS`
     > 4. 引入了<App/>标签
 
+  > redux入口
+  >
+  > 1. createStore，将combine后的reducer注入到store
+  > 2. 应用了middleware [TBC]
+  > 3. 获取products数据
+  >    1. dispatch了位于actions/index.js的action: `getAllProducts`
+  >    2. 在`getAllProducts`中调用了位于api/shop.js的异步方法`shop.getProducts`异步获取数据
+  >    3. dispatch了位于actions/index.js的action:`receiveProducts`最终返回的state type为： `'RECEIVE_PRODUCTS'`
+  > 4. 引入了<App/>标签
+  > 
 - containers
   - App.js
         > 引入了`ProductsContainer`和`CartContainer`
@@ -465,6 +472,7 @@ http://es6.ruanyifeng.com/#docs/decorator
         > 
         > 1. products: 
         > 2. addToCart
+
   - CartContainer.js
 
 - components
