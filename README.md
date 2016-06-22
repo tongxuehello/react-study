@@ -36,7 +36,7 @@ jsx代码也是写在html里，用`<script src="text/babel"></script>`标识
 ### 代码结构
 
 - build
- - js
+- js
 - app.entry.js
 - common.js
 - src
@@ -359,17 +359,17 @@ var rootReducer = combineReducers(reducers)
 
   - 处理多个stateCreator：**bindActionCreators**
 
-	```javascript
-	export default function bindActionCreators(actionCreators, dispatch) {
-		if (typeof actionCreators === 'function') { //如果是单个 	actionCreator，绑定一词
-			return bindActionCreator(actionCreators, dispatch);
-		}
-		//返回一个改造过的「函数组合」
-		return mapValues(actionCreators, actionCreator =>
-			bindActionCreator(actionCreator, dispatch)
-		)
-	}
-	```
+  ```javascript
+  export default function bindActionCreators(actionCreators, dispatch) {
+  	if (typeof actionCreators === 'function') { //如果是单个actionCreator，绑定一词
+  		return bindActionCreator(actionCreators, dispatch);
+  	}
+  	//返回一个改造过的「函数组合」
+  	return mapValues(actionCreators, actionCreator =>
+  		bindActionCreator(actionCreator, dispatch)
+  	)
+  }
+  ```
 
 #### 入口
 
@@ -443,7 +443,7 @@ http://es6.ruanyifeng.com/#docs/decorator
 
 ### 2. 源码分析
 
-- index.js
+-   index.js
     > redux入口
     >
     > 1. createStore，将combine后的reducer注入到store
@@ -454,35 +454,35 @@ http://es6.ruanyifeng.com/#docs/decorator
     >    3. dispatch了位于actions/index.js的action:`receiveProducts`最终返回的state type为： `RECEIVE_PRODUCTS`
     > 4. 引入了<App/>标签
 
-- containers
-  - App.js
-        > 引入了`ProductsContainer`和`CartContainer`
-  - ProductsContainer.js
-        > props:
-        > 
-        > 1. products: 
-        > 2. addToCart
+-   containers
+    -     App.js
+          > 引入了`ProductsContainer`和`CartContainer`
+    -     ProductsContainer.js
+          > props:
+          >
+          > 1. products: 
+          > 2. addToCart
 
-  - CartContainer.js
+    -     CartContainer.js
 
-- components
-  - ProductsList.js
-  - ProductItem.js
-  - Product.js
-  - Cart.js
+-   components
+    - ProductsList.js
+    - ProductItem.js
+    - Product.js
+    - Cart.js
 
-- actions
-  - index.js
+-   actions
+    - index.js
 
-- reducers
-  - index.js
-  - products.js
-  - cart.js
+-   reducers
+    - index.js
+    - products.js
+    - cart.js
 
-- api
+-   api
 
-  - shop.js
-  - products.json
+    - shop.js
+    - products.json
 
 ## 其他说明
 
